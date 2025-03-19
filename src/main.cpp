@@ -24,6 +24,7 @@
 // score tracking variables
 int leftScore = 0; 
 int rightScore = 0;
+float rainStartTime = -1.0f;
 
 // move out to external class
 unsigned int vertexShader;
@@ -154,7 +155,11 @@ int main(int argc, char *argv[])
             Ball* gameBall = world.FindByName<Ball>("Ball");
             if (gameBall)
                 world.Destroy(gameBall); // Remove main ball
-
+            
+                
+            if (rainStartTime < 0) // Start timer when raining begins
+                rainStartTime = SDL_GetTicks() / 1000.0f; // Convert to seconds
+            
             // Spawn raining balls
             for (int i = 0; i < 20; i++) 
             {
@@ -167,6 +172,11 @@ int main(int argc, char *argv[])
                 rainBall->fallSpeed = 100.0f;
                 rainBall->color = (leftScore == 5) ? glm::vec4(1, 0, 0, 1) : glm::vec4(0, 0, 1, 1); // Red for left, Blue for right
             }
+        }
+
+        if (rainStartTime > 0 && (SDL_GetTicks() / 1000.0f - rainStartTime) >= 10.0f) 
+        {
+            return 0; // Exit the program after 10 seconds
         }
 
         window.SwapBuffer();

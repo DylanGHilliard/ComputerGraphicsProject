@@ -18,7 +18,7 @@ void Ball::Update(float _dt)
 {
     if (inputManager->GetKey(SDL_SCANCODE_SPACE))
     {
-        isMoving = true;
+        isMoving = false;
     }
     if (isMoving)
     {
@@ -70,12 +70,14 @@ void Ball::Update(float _dt)
     Paddle* leftPaddle = world->FindByName<Paddle>("LeftPaddle"); 
     if (EntityOverlap2D(*this ,*leftPaddle)) {
         dir.x = abs(dir.x);
+        leftPaddle->isHit = true;
     }
 
     // detect if ball hits right paddle
     Paddle* rightPaddle = world->FindByName<Paddle>("RightPaddle"); 
     if (EntityOverlap2D(*this ,*rightPaddle)) {
         dir.x = abs(dir.x) * -1.0f;
+        rightPaddle->isHit = true;
     }
 
     if (dir != vec2(0.0f))

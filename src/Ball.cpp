@@ -12,6 +12,9 @@ void Ball::Start()
 {
     name = "Ball";
     position = vec3(window->GetScreenWidth() * 0.5f, window->GetScreenHeight() * 0.5f, 0.0f);
+
+
+    // scale of the ball is defined here
     scale = vec3(15.0f, 15.0f, 0.0f);
 }
 

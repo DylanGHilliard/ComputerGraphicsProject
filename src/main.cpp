@@ -67,6 +67,12 @@ int main(int argc, char *argv[])
     spriteShader.AddAttribute("aUV");
     spriteShader.Link();
 
+    Canis::Shader circleShader;
+    circleShader.Compile("assets/shaders/sprite.vs", "assets/shaders/circle.fs");
+    circleShader.AddAttribute("aPos");
+    circleShader.AddAttribute("aUV");
+    circleShader.Link();
+
     InitModel();
 
     //Canis::GLTexture texture = Canis::LoadImageGL("assets/textures/ForcePush.png", true);
@@ -104,7 +110,7 @@ int main(int argc, char *argv[])
     
     {
         Ball *ball = world.Instantiate<Ball>();
-        ball->shader = spriteShader;
+        ball->shader = circleShader;
         ball->name = "Ball";
         ball->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
     }

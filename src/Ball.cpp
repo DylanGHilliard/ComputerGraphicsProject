@@ -20,6 +20,18 @@ void Ball::Start()
 
 void Ball::Update(float _dt) 
 {
+    if (isRaining) 
+    {
+        position.y -= fallSpeed * _dt; // Fall downward
+        fallSpeed += 20.0f * _dt; // Gradually increase speed
+
+        if (position.y < 0) 
+        {
+            world->Destroy(this); // Remove the ball when it reaches the bottom
+        }
+        return;
+    }
+
     if (inputManager->GetKey(SDL_SCANCODE_SPACE))
     {
         isMoving = false;
@@ -65,6 +77,16 @@ void Ball::Update(float _dt)
         Ball *ball = world ->FindByName<Ball>("Ball");
         ball->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f); //ball back to white
         ball->speed = 100.0f; //changes  ball speed back to 100.0f
+
+        if (rightScore >= 5) {
+            for (int i = 0; i < 20; i++) { // Spawn 20 balls
+                Ball *newBall = world->Instantiate<Ball>();
+                newBall->position = vec3(rand() % window->GetScreenWidth(), window->GetScreenHeight(), 0.0f);
+                newBall->dir = vec2(0.0f, -1.0f); // Falling direction
+                newBall->speed = 200.0f; // Falling speed
+                newBall->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f); // Red (right player won)
+            }
+        }
     }
     
     if (position.x < scale.x * 0.5f) {
@@ -74,6 +96,15 @@ void Ball::Update(float _dt)
         Ball *ball = world ->FindByName<Ball>("Ball");
         ball->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f); //ball back to white
         ball->speed = 100.0f; //changes  ball speed back to 100.0f
+        if (leftScore >= 5) {
+            for (int i = 0; i < 20; i++) { // Spawn 20 balls
+                Ball *newBall = world->Instantiate<Ball>();
+                newBall->position = vec3(rand() % window->GetScreenWidth(), window->GetScreenHeight(), 0.0f);
+                newBall->dir = vec2(0.0f, -1.0f); // Falling direction
+                newBall->speed = 200.0f; // Falling speed
+                newBall->color = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f); // Blue (left player won)
+            }
+        }
     }
 
     // detect if ball hits left paddle

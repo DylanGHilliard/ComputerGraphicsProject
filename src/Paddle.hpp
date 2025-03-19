@@ -12,7 +12,7 @@ public:
     void OnDestroy();
     float EaseOutCircle(float _time);
 
-    float speed = 200.0f;
+    float speed = 500.0f;
     glm::vec4 color = glm::vec4(1.0f);
     bool isHit = false;
 

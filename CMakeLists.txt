@@ -46,8 +46,8 @@ target_include_directories(${PROJECT_NAME}
 
 # This command will copy your assets folder to your running directory, in order to have access to your shaders, textures, etc
 if (WIN32)
-    add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E create_symlink
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${CMAKE_SOURCE_DIR}/${ASSETS_DIR_NAME}/
             ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${ASSETS_DIR_NAME})
 else()

@@ -149,13 +149,24 @@ int main(int argc, char *argv[])
         // update the window title bar with the current score
         window.SetWindowName("Pong - Score: Blue " + std::to_string(rightScore) + " | Red " + std::to_string(leftScore));
 
-        if (leftScore >= 5) 
+        if (leftScore == 5 || rightScore == 5) 
         {
-            break;
-        }
-        if (rightScore >= 5)
-        {
-            break;
+            Ball* gameBall = world.FindByName<Ball>("Ball");
+            if (gameBall)
+                world.Destroy(gameBall); // Remove main ball
+
+            // Spawn raining balls
+            for (int i = 0; i < 20; i++) 
+            {
+                Ball* rainBall = world.Instantiate<Ball>();
+                rainBall->shader = spriteShader;
+                rainBall->name = "RainBall";
+                rainBall->position = glm::vec3(rand() % window.GetScreenWidth(), window.GetScreenHeight(), 0.0f);
+                rainBall->scale = glm::vec3(10.0f, 10.0f, 0.0f);
+                rainBall->isRaining = true;
+                rainBall->fallSpeed = 100.0f;
+                rainBall->color = (leftScore == 5) ? glm::vec4(1, 0, 0, 1) : glm::vec4(0, 0, 1, 1); // Red for left, Blue for right
+            }
         }
 
         window.SwapBuffer();

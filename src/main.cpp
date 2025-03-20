@@ -156,33 +156,55 @@ int main(int argc, char *argv[])
         // update the window title bar with the current score
         window.SetWindowName("Pong - Score: Blue " + std::to_string(rightScore) + " | Red " + std::to_string(leftScore));
 
-        if (leftScore == 5 || rightScore == 5) 
+        if (leftScore == 1 || rightScore == 1) 
         {
+            const float SPAWN_INTERVAL = 0.1f; // CONTROLS TIME BALLS SPAWN BETWEEN EACH OTHER
+            static float lastSpawnTime = 0.0f; 
+        
+            float currentTime = SDL_GetTicks() / 1000.0f; // the divide converts the miliseconds to seconds
+        
+            if (rainStartTime < 0) 
+                rainStartTime = currentTime; // start timer
+        
             Ball* gameBall = world.FindByName<Ball>("Ball");
             if (gameBall)
-                world.Destroy(gameBall); // Remove main ball
-            
-                
-            if (rainStartTime < 0) // Start timer when raining begins
-                rainStartTime = SDL_GetTicks() / 1000.0f; // Convert to seconds
-            
-            // Spawn raining balls
-            for (int i = 0; i < 20; i++) 
+                world.Destroy(gameBall); // remove main ball
+        
+           
+            if (currentTime - lastSpawnTime >= SPAWN_INTERVAL) // logic for the delay
             {
+                lastSpawnTime = currentTime; // this will reset the timer
+        
+                // random fields
                 Ball* rainBall = world.Instantiate<Ball>();
-                rainBall->shader = spriteShader;
+                const float MAX_SCALE = 20.0f;
+                const float MIN_SCALE = 10.0f;
+                const float MAX_SCREEN_HEIGHT = window.GetScreenHeight();
+                const float MAX_SCREEN_WIDTH = window.GetScreenWidth();
+                const float HEIGHT_OFFSET = 0;
+        
+                float getRandomNumberForScales =           
+                       MIN_SCALE + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (MAX_SCALE - MIN_SCALE)));
+        
+                float getRandomNumberForHeightPositions =  
+                       (MAX_SCREEN_HEIGHT - HEIGHT_OFFSET) + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (MAX_SCREEN_HEIGHT - (MAX_SCREEN_HEIGHT - HEIGHT_OFFSET))));
+        
+                float getRandomNumberForWidthPositions =   
+                       static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / MAX_SCREEN_WIDTH));
+        
+                rainBall->shader = circleShader;
                 rainBall->name = "RainBall";
-                rainBall->position = glm::vec3(rand() % window.GetScreenWidth(), window.GetScreenHeight(), 0.0f);
-                rainBall->scale = glm::vec3(10.0f, 10.0f, 0.0f);
+                rainBall->position = glm::vec3(getRandomNumberForWidthPositions, getRandomNumberForHeightPositions, 0.0f);
+                rainBall->scale = glm::vec3(getRandomNumberForScales, getRandomNumberForScales, 0.0f);
                 rainBall->isRaining = true;
                 rainBall->fallSpeed = 100.0f;
-                rainBall->color = (leftScore == 5) ? glm::vec4(1, 0, 0, 1) : glm::vec4(0, 0, 1, 1); // Red for left, Blue for right
+                rainBall->color = (leftScore == 5) ? glm::vec4(1, 0, 0, 1) : glm::vec4(0, 0, 1, 1); 
             }
         }
 
         if (rainStartTime > 0 && (SDL_GetTicks() / 1000.0f - rainStartTime) >= 10.0f) 
         {
-            return 0; // Exit the program after 10 seconds
+            return 0; // exit the program after 10 seconds
         }
 
         window.SwapBuffer();

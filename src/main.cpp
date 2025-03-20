@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     SDL_DisplayMode displayMode;
     if (SDL_GetCurrentDisplayMode(0, &displayMode) == 0) {
 
-        float windowSize = 640;
+        float windowSize = 800;
         float windowHeight = (windowSize * ((float)displayMode.h / 1080.0f));
         float windowWidth  = (windowSize * ((float)displayMode.w / 1920.0f));
 

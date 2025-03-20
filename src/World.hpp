@@ -29,7 +29,7 @@ public:
     void Update(glm::mat4 _view, glm::mat4 _projection, float _dt) {
         for(Entity* e : entities)
         {
-            e->Update(_dt);
+            
 
             e->shader.Use();
             e->shader.SetFloat("TIME", SDL_GetTicks() / 1000.0f);
@@ -42,6 +42,8 @@ public:
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
             glBindVertexArray(0);
             e->shader.UnUse();
+
+            e->Update(_dt);
         }
     }
 

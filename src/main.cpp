@@ -169,7 +169,20 @@ int main(int argc, char *argv[])
             Ball* gameBall = world.FindByName<Ball>("Ball");
             if (gameBall)
                 world.Destroy(gameBall); // remove main ball
-        
+                
+            static bool paddlesRemoved = false; // Ensure paddles are removed only once
+
+            if (!paddlesRemoved) {
+                Paddle* leftPaddle = world.FindByName<Paddle>("LeftPaddle");
+                Paddle* rightPaddle = world.FindByName<Paddle>("RightPaddle");
+
+                if (leftPaddle) world.Destroy(leftPaddle);
+                if (rightPaddle) world.Destroy(rightPaddle);
+
+                paddlesRemoved = true;
+    }
+
+            
            
             if (currentTime - lastSpawnTime >= SPAWN_INTERVAL) // logic for the delay
             {

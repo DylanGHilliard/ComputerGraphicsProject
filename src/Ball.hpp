@@ -10,6 +10,9 @@ public:
     void Update(float _dt);
     void Draw();
     void OnDestroy();
+    glm::vec3 GetBallPos();
+    float GetBallSpeed();
+    bool GetIsMoving();
 
     float speed = 100.0f;
     glm::vec2 dir = glm::vec2(0.0f, 0.0f);

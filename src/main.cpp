@@ -16,6 +16,7 @@
 #include "Ball.hpp"
 #include "Paddle.hpp"
 #include "Background.hpp"
+#include "Particle.hpp"
 
 // git restore .
 // git fetch
@@ -136,6 +137,7 @@ int main(int argc, char *argv[])
         paddle->shader.SetBool("isScrolling", false);
     }
 
+    Uint32 lastParticleSpawnTime = SDL_GetTicks();
     while (inputManager.Update(window.GetScreenWidth(), window.GetScreenHeight()))
     {
         deltaTime = frameRateManager.StartFrame();
@@ -155,6 +157,33 @@ int main(int argc, char *argv[])
 
         // update the window title bar with the current score
         window.SetWindowName("Pong - Score: Blue " + std::to_string(rightScore) + " | Red " + std::to_string(leftScore));
+
+        // Particle spawn every 0.4 second
+        //################################################
+
+
+
+        Ball* ball = world.FindByName<Ball>("Ball");
+
+        if (ball) {
+            bool theBallIsMoving = ball->GetIsMoving();
+            // i dont like having another nested if statement but best fix i can think 
+            // of for segmentation fault error with theBallIsMoving being initalized right after the ball pointer assignment
+            if (theBallIsMoving) { 
+                float ballSpeed = ball->GetBallSpeed();
+                float spawnInterval = 40000.0f / ballSpeed;
+        
+                Uint32 currentTime = SDL_GetTicks();
+                if (currentTime - lastParticleSpawnTime >= spawnInterval) {
+                    Particle *particle = world.Instantiate<Particle>();
+                    particle->shader = circleShader;
+                    particle->color = glm::vec4(1.0f, 1.0f, 1.0f, 0.3f);
+                    lastParticleSpawnTime = currentTime;
+                }
+            }
+        }
+
+        //################################################
 
         if (leftScore == 1 || rightScore == 1) 
         {

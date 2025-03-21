@@ -32,29 +32,12 @@ void Ball::Update(float _dt)
         return;
     }
 
-    if (inputManager->GetKey(SDL_SCANCODE_SPACE))
-    {
-        isMoving = false;
-    }
-    if (isMoving)
-    {
-        // OBJECT MOVING
-        int mouseX, mouseY;
-        SDL_GetMouseState(&mouseX, &mouseY);
-        cursorPosition = glm::vec2(mouseX, mouseY);
-        cursorPosition.y = window->GetScreenHeight() - cursorPosition.y; // correct y position
-
-        vec2 direction = cursorPosition - glm::vec2(position.x, position.y);
-
-        dir = glm::normalize(direction);
-        position += vec3(dir.x, dir.y, 0.0f) * speed * _dt;
-
-    }
-
     if (dir == vec2(0.0f))
     {
+        isMoving = false;
         if (inputManager->GetKey(SDL_SCANCODE_SPACE))
         {
+            isMoving = true;
             vec2 directions[] = {vec2(1.0f, 1.0f), vec2(1.0f, -1.0f), vec2(-1.0f, 1.0f), vec2(-1.0f, -1.0f)};
             dir = directions[rand()%4];
         }
@@ -126,6 +109,7 @@ void Ball::Update(float _dt)
         ball->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
         ball->speed = speed * 1.2f; //increases balls speed each time it hits a paddle
     }
+    Canis::Log(std::to_string(speed));
 
     if (dir != vec2(0.0f))
         position += vec3(dir.x, dir.y, 0.0f) * speed * _dt;
@@ -147,4 +131,14 @@ void Ball::Draw() {mat4 transform = mat4(1.0f);
 void Ball::OnDestroy() {
     
     
+}
+
+vec3 Ball::GetBallPos() {
+    return position;
+}
+bool Ball::GetIsMoving() {
+    return isMoving;
+}
+float Ball::GetBallSpeed() {
+    return speed;
 }

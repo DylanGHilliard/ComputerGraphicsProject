@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
 
         //################################################
 
-        if (leftScore == 1 || rightScore == 1) 
+        if (leftScore == 5 || rightScore == 5) 
         {
             const float SPAWN_INTERVAL = 0.1f; // CONTROLS TIME BALLS SPAWN BETWEEN EACH OTHER
             static float lastSpawnTime = 0.0f; 

@@ -109,7 +109,7 @@ void Ball::Update(float _dt)
         ball->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
         ball->speed = speed * 1.2f; //increases balls speed each time it hits a paddle
     }
-    Canis::Log(std::to_string(speed));
+    //Canis::Log(std::to_string(speed));
 
     if (dir != vec2(0.0f))
         position += vec3(dir.x, dir.y, 0.0f) * speed * _dt;
